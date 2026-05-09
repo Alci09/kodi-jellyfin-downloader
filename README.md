@@ -6,10 +6,10 @@ This was specifically built to bypass the strict "Scoped Storage" write permissi
 
 ---
 
-## ⚠️ Version 2.0 vs Version 1.1
-**Version 2.0 (Latest)** requires a Jellyfin API key to function. Moving to a direct API connection unlocked massive stability improvements, support for downloading entire **Playlists**, flawless Season/Series routing, and true background downloading (allowing you to watch other media while the queue processes).
+## ⚠️ Version 2.1 vs Version 1.1
+**Version 2.1 (Latest)** requires a Jellyfin API key to function. Moving to a direct API connection unlocked massive stability improvements, support for downloading entire **Playlists**, flawless Season/Series routing, true background downloading, and **Full Offline Library Sync** (auto-generating metadata and artwork).
 
-**Version 1.1 (Legacy)** does *not* require an API key (it intercepts Kodi's internal player links). If you do not want to generate an API key, and do not need Playlist support or background playback capability, you can still download [Release V1.1](https://github.com/Apollosport/kodi-jellyfin-downloader/releases/tag/v1.1).
+**Version 1.1 (Legacy)** does *not* require an API key (it intercepts Kodi's internal player links). If you do not want to generate an API key, and do not need Playlist support, metadata generation, or background playback capability, you can still download [Release V1.1](https://github.com/Apollosport/kodi-jellyfin-downloader/releases/tag/v1.1).
 
 ---
 
@@ -18,14 +18,14 @@ Native Android TV streaming apps do not support offline downloading. If you try 
 
 **The Workaround:** Because Kodi natively requests proper system-level storage permissions, this add-on uses Kodi's internal Virtual File System (VFS) to securely pull video files from your Jellyfin server via the REST API and write them directly to your USB drive.
 
-## Features (V2.0)
+## Features
+* **Full Offline Library Sync (New in 2.1):** It doesn't just download the video. It automatically generates Kodi-perfect `.nfo` metadata files, grabs posters/fanart, and downloads external `.srt`/`.ass` subtitles, perfectly renaming them to match your video files.
 * **Bypasses Android TV Restrictions:** Writes directly to external USB drives natively through Kodi.
 * **Bulk Downloading:** Long-press on a Season, an entire TV Show, or a Playlist to queue all contents.
 * **Smart Playlist Support:** Safely extracts the raw media files from your custom Jellyfin playlists.
 * **Unwatched Filtering:** Only download episodes you haven't seen yet (handled server-side for lightning-fast queuing).
 * **Auto-Folder Generation:** Automatically organizes TV episodes into `Show Name/Season XX/` folders on your USB drive.
-* **True Background Processing:** Downloads run silently in the background with a visual progress indicator. Because V2.0 uses pure API requests, **you can now watch other videos in Kodi while your download queue processes!**
-* **Proxy & Redirect Safe:** Includes a custom network engine to safely bypass reverse proxies and HTTP redirects without dropping authentication headers.
+* **True Background Processing:** Downloads run silently in the background with a visual progress indicator. Because V2.1 uses pure API requests, **you can now watch other videos in Kodi while your download queue processes!**
 
 ## Installation & Setup
 1. Go to the [Releases](https://github.com/Apollosport/kodi-jellyfin-downloader/releases) page and download the latest `context.jellyfin.downloader.zip` file.
@@ -37,8 +37,20 @@ Native Android TV streaming apps do not support offline downloading. If you try 
    * *(Optional)* Set a default download path to skip the folder selection prompt every time.
 5. Long-press (or right-click) on any Movie, Episode, Season, TV Show, or Playlist in your library, and click **Download file**.
 
+---
+
+## 💡 Pro-Tip: The Best Offline User Experience Setup
+For the best possible experience when taking your media off-grid (camping, road trips, Airport, etc.), we highly recommend creating **two separate Profiles** in Kodi:
+
+1. **Profile 1 (Online Manager):** This is your main profile connected to your Wi-Fi. You install the Jellyfin plugin here, browse your live server, and use this add-on to queue and download media to your external USB drive.
+2. **Profile 2 (Offline Theater):** A clean profile completely disconnected from Jellyfin. Add your download folder as a standard Media Source in Kodi, and set the scraper to **"Local information only"**. 
+
+Because this add-on automatically downloads all `.nfo` plots, posters, and fanart alongside your videos, **Profile 2 will instantly build a beautiful, Netflix-style interface offline**, requiring absolutely zero internet connection!
+
+---
+
 ## Known Limitations
-* **External Subtitles:** This script requests the raw video file. If your movies are `.mkv` files with embedded subtitles, they will download perfectly. However, external `.srt` files sitting next to your movies on your server are not currently fetched.
+* **Messy Subtitle Filenames:** While this add-on *does* download external subtitles, it relies on Jellyfin's API knowing they exist. If your `.srt` files on your server are named poorly (e.g., `movietitle.spa.45.srt` instead of matching the video file exactly) and Jellyfin's scanner ignores them, this add-on will not be able to find them either. Keep your server library well-organized! (I failed at this in the past ;)
 
 ## Disclaimer
 **Use at your own risk.** This add-on is provided "as-is" without any warranty. By using this software, you agree that the developer is not responsible for any corrupted files, data loss, USB drive formatting issues, or instability caused to your Kodi installation.
