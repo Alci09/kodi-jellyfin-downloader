@@ -184,7 +184,8 @@ def process_metadata(q_item, root_dir, user_id):
         if "Primary" in item.get("ImageTags", {}):
             download_extra_file(f"{SERVER_URL}/Items/{i_id}/Images/Primary", base_path + "-thumb.jpg")
             
-        series_dir = root_dir + f"Series/{safe_xml(item.get('SeriesName', 'Series'))}/"
+        #series_dir = root_dir + f"Series/{safe_xml(item.get('SeriesName', 'Series'))}/"
+        series_dir = root_dir + f"Series/{sanitize_name(item.get('SeriesName', 'Series'))}/"
         if not xbmcvfs.exists(series_dir + "tvshow.nfo"):
             series_id = item.get("SeriesId")
             if series_id:
@@ -206,21 +207,34 @@ def process_metadata(q_item, root_dir, user_id):
                 index = stream.get("Index")
                 raw_codec = stream.get("Codec", "srt").lower()
                 lang = stream.get("Language", "und")
-                
+
                 save_ext = "srt" if raw_codec == "subrip" else raw_codec
                 sub_path = f"{base_path}.{lang}.{save_ext}"
-                
+
                 urls_to_try = []
                 delivery = stream.get("DeliveryUrl")
                 if delivery: urls_to_try.append(f"{SERVER_URL}{delivery}")
                 urls_to_try.append(f"{SERVER_URL}/Videos/{i_id}/{source_id}/Subtitles/{index}/Stream.{save_ext}")
                 urls_to_try.append(f"{SERVER_URL}/Videos/{i_id}/{source_id}/Subtitles/{index}/Stream.{raw_codec}")
-                
+
                 for u in urls_to_try:
                     sep = "&" if "?" in u else "?"
                     full_url = f"{u}{sep}api_key={API_KEY}"
                     if download_extra_file(full_url, sub_path):
                         break
+
+# --- HELPER NORMALIZE FILE NAME ---
+def sanitize_name(name):
+    if not name:
+        return "Unknown"
+    # Problemzeichen durch dateisystemfreundliche Alternativen ersetzen
+    name = name.replace('&', 'and')
+    name = name.replace(':', ' -')
+    # Alle verbleibenden ungültigen Zeichen entfernen
+    name = "".join([c for c in name if c.isalpha() or c.isdigit() or c in (' ', '-', '_', '.', '!')]).rstrip()
+    # Doppelte Leerzeichen normalisieren
+    name = ' '.join(name.split())
+    return name
 
 # --- VIDEO DOWNLOAD ENGINE ---
 def download_file(title, download_url, dest_path, dpBG):
@@ -391,7 +405,8 @@ def main():
                     if ext_match[1]: ext = ext_match[1]
 
             if i_type == "Episode":
-                show_name = "".join([c for c in item.get("SeriesName", "Series") if c.isalpha() or c.isdigit() or c==' ']).rstrip()
+                # show_name = "".join([c for c in item.get("SeriesName", "Series") if c.isalpha() or c.isdigit() or c==' ']).rstrip()
+                show_name = sanitize_name(item.get("SeriesName", "Series"))
                 season_num = item.get("ParentIndexNumber", 0)
                 ep_num = item.get("IndexNumber", 0)
                 
