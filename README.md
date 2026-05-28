@@ -1,5 +1,5 @@
 ## Installation & Setup
-1. Go to the [Releases](https://github.com/Apollosport/kodi-jellyfin-downloader/releases) page and download the latest `context.jellyfin.downloader.zip` file.
+1. Install / copy the content 'context.jellyfin.downloader' into the Kodi "addon"-Folder
 2. Open Kodi and navigate to **Add-ons** -> **Install from zip file** and select the downloaded `.zip` file.
 3. **Generate an API Key:** Open your Jellyfin Web UI, go to **Dashboard** -> **API Keys** (under Advanced), and click the `+` to generate a new key.
 4. **Configure the Add-on:** In Kodi, go to **My Add-ons** -> **Context menus** -> **Jellyfin Downloader** -> **Configure**. 
